@@ -10,9 +10,9 @@
 #
 #******************************************************************
 
-folder    <- "./Res_Final_Financial_Decisions"                  # data files folder
-baseName  <- "Sim_"                     # data files base name (same as .lsd file)
-nExp      <- 8                          # number of experiments (sensitivity/different cases)
+folder    <- "C:/LSD/Work/Banks_TAPAS/R/data"                  # data files folder
+baseName  <- "Sim"                     # data files base name (same as .lsd file)
+nExp      <- 2                          # number of experiments (sensitivity/different cases)
 iniDrop   <- 0                          # initial time steps to drop from analysis (0=none)
 nKeep     <- -1                         # number of time steps to keep (-1=all)
 cores     <- 0                          # maximum number of cores to allocate (0=all)
@@ -21,7 +21,7 @@ savDat    <- F                          # save processed data files and re-use i
 expVal <- c("Baseline", "T1", "T2", "T3", "T4", "T5", "T6", "T7")                   # case parameter values
 
 # Aggregated variables to use
-logVars <- c( "Real_GDP",               # Real GDP
+logVars <- c( "Country_Real_GDP",               # Real GDP
               "C_r",                    # Real Consumption
               "I_r",                    # Real Investment
               "G_r",                    # Real Government Expenses
@@ -56,8 +56,8 @@ aggrVars <- append( logVars,
                         "MK_G",         # Markup Growth
                         "EMP_G",        # Employment Growth
                         "U",            # Unemployment Rate
-                        "Profit_Share", # Profit Share 
-                        "Wage_Share",   # Wage Share
+                        "Country_Profit_Share", # Profit Share 
+                        "Country_Wage_Share",   # Wage Share
                         "PCU",          # Productive Capacity Utilization
                         "PR",           # Profit Rate
                         "CGDP",         # Consumption Share of GDP
@@ -84,8 +84,8 @@ aggrVars <- append( logVars,
                         "MK_G",         # Markup Growth
                         "EMP_G",        # Employment Growth
                         "U",            # Unemployment Rate
-                        "Profit_Share", # Profit Share 
-                        "Wage_Share",    # Wage Share
+                        "Country_Profit_Share", # Profit Share 
+                        "Country_Wage_Share",    # Wage Share
                         "PCU",          # Productive Capacity Utilization
                         "PR",           # Profit Rate
                         "CGDP",         # Consumption Share of GDP
@@ -150,7 +150,7 @@ library( parallel, verbose = FALSE, quietly = TRUE )
 # Function to read one experiment data (to be parallelized)
 readExp <- function( exper ) {
   if( nExp > 1 ) {
-    myFiles <- list.files( path = folder, pattern = paste0( baseName, exper, "_[0-9]+.res" ),
+    myFiles <- list.files( path = folder, pattern = paste0( baseName, "_[0-9]+.res" ),
                            full.names = TRUE )
   } else {
     myFiles <- list.files( path = folder, pattern = paste0( baseName, "_[0-9]+.res" ),
@@ -422,8 +422,8 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
   
   
   box_plots( mcData, nExp, nSize, TmaxStat, TmaskStat, warmUpStat,
-                         nTstat, legends, legendList, sDigits, bPlotCoef,
-                         bPlotNotc, folder, outDir, repName )
+             nTstat, legends, legendList, sDigits, bPlotCoef,
+             bPlotNotc, folder, outDir, repName )
   
   #
   # ====== STATISTICS GENERATION ======
@@ -431,154 +431,154 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
   
   # Create vectors and lists to hold the Monte Carlo results
   gdp_gr    <-
-  infla     <-
-  cr_gr     <-
-  ir_gr     <-
-  gr_gr     <-
-  mr_gr     <-
-  x_gr      <-
-  nx_gr     <-
-  inve_gr   <-
-  k_gr      <-
-  prod_gr   <-
-  profits_gr<-
-  wage_gr   <-
-  mk_gr     <-
-  emp_gr    <-
-  kl_rt     <-
-  pr_sh     <-
-  wg_sh     <-  
-  pr_rt     <-
-  u_rt      <-
-  pcu_rt    <-
-  cgdp_rt   <-
-  igdp_rt   <-
-  ggdp_rt   <-
-  nxgdp_rt  <-
-  invgdp_rt <-
-  kgdp_rt   <-
-  vector( mode = "numeric", length = nSize )
+    infla     <-
+    cr_gr     <-
+    ir_gr     <-
+    gr_gr     <-
+    mr_gr     <-
+    x_gr      <-
+    nx_gr     <-
+    inve_gr   <-
+    k_gr      <-
+    prod_gr   <-
+    profits_gr<-
+    wage_gr   <-
+    mk_gr     <-
+    emp_gr    <-
+    kl_rt     <-
+    pr_sh     <-
+    wg_sh     <-  
+    pr_rt     <-
+    u_rt      <-
+    pcu_rt    <-
+    cgdp_rt   <-
+    igdp_rt   <-
+    ggdp_rt   <-
+    nxgdp_rt  <-
+    invgdp_rt <-
+    kgdp_rt   <-
+    vector( mode = "numeric", length = nSize )
   
   gdp_r_sd  <-
-  con_r_sd  <-
-  inv_r_sd  <-
-  gov_r_sd  <-
-  imp_r_sd  <-
-  x_r_sd    <-
-  nx_r_sd   <-
-  p_sd      <-
-  k_sd      <-
-  inve_sd   <-
-  emp_sd    <-
-  profits_sd<-
-  wage_sd   <-
-  pr_sh_sd  <-
-  wg_sh_sd  <-
-  prod_sd   <-
-  mk_sd     <-
-  kl_sd     <-
-  infla_sd  <-
-  u_sd      <-
-  pcu_sd    <-
-  pr_sd     <-
-  cgdp_sd   <-
-  igdp_sd   <-
-  ggdp_sd   <-
-  nxgdp_sd  <-
-  invgdp_sd <-
-  kgdp_sd   <-
-  vector( mode = 'numeric', length = nSize )
+    con_r_sd  <-
+    inv_r_sd  <-
+    gov_r_sd  <-
+    imp_r_sd  <-
+    x_r_sd    <-
+    nx_r_sd   <-
+    p_sd      <-
+    k_sd      <-
+    inve_sd   <-
+    emp_sd    <-
+    profits_sd<-
+    wage_sd   <-
+    pr_sh_sd  <-
+    wg_sh_sd  <-
+    prod_sd   <-
+    mk_sd     <-
+    kl_sd     <-
+    infla_sd  <-
+    u_sd      <-
+    pcu_sd    <-
+    pr_sd     <-
+    cgdp_sd   <-
+    igdp_sd   <-
+    ggdp_sd   <-
+    nxgdp_sd  <-
+    invgdp_sd <-
+    kgdp_sd   <-
+    vector( mode = 'numeric', length = nSize )
   
   gdp_gdp    <-
-  cr_gdp     <-
-  ir_gdp     <-
-  gov_gdp    <-
-  imp_gdp    <-
-  x_gdp      <-
-  nx_gdp     <-
-  p_gdp      <-
-  k_gdp      <-
-  inve_gdp   <-
-  emp_gdp    <-
-  profits_gdp<-
-  wage_gdp   <-
-  prod_gdp   <-
-  mk_gdp     <-
-  kl_gdp     <-
-  infla_gdp  <-
-  u_gdp      <-
-  pr_sh_gdp  <-
-  wg_sh_gdp  <-
-  pcu_gdp    <-
-  pr_gdp     <-
-  cgdp_gdp   <-
-  igdp_gdp   <-
-  ggdp_gdp   <-
-  nxgdp_gdp  <-
-  invgdp_gdp <-
-  kgdp_gdp   <-
-  list( )
+    cr_gdp     <-
+    ir_gdp     <-
+    gov_gdp    <-
+    imp_gdp    <-
+    x_gdp      <-
+    nx_gdp     <-
+    p_gdp      <-
+    k_gdp      <-
+    inve_gdp   <-
+    emp_gdp    <-
+    profits_gdp<-
+    wage_gdp   <-
+    prod_gdp   <-
+    mk_gdp     <-
+    kl_gdp     <-
+    infla_gdp  <-
+    u_gdp      <-
+    pr_sh_gdp  <-
+    wg_sh_gdp  <-
+    pcu_gdp    <-
+    pr_gdp     <-
+    cgdp_gdp   <-
+    igdp_gdp   <-
+    ggdp_gdp   <-
+    nxgdp_gdp  <-
+    invgdp_gdp <-
+    kgdp_gdp   <-
+    list( )
   
   gdp_gdp_pval       <- 
-  cr_gdp_pval        <- 
-  ir_gdp_pval        <- 
-  gov_gdp_pval       <- 
-  imp_gdp_pval       <- 
-  x_gdp_pval         <- 
-  nx_gdp_pval        <- 
-  p_gdp_pval         <- 
-  k_gdp_pval         <- 
-  inve_gdp_pval      <- 
-  emp_gdp_pval       <- 
-  wage_gdp_pval      <- 
-  profits_gdp_pval   <- 
-  wage_gdp_pval      <- 
-  prod_gdp_pval      <- 
-  mk_gdp_pval        <- 
-  kl_gdp_pval        <- 
-  infla_gdp_pval     <- 
-  u_gdp_pval         <- 
-  pr_sh_gdp_pval     <- 
-  wg_sh_gdp_pval     <- 
-  pcu_gdp_pval       <- 
-  pr_gdp_pval        <- 
-  cgdp_gdp_pval          <- 
-  igdp_gdp_pval      <- 
-  ggdp_gdp_pval      <- 
-  nxgdp_gdp_pval     <- 
-  invgdp_gdp_pval    <- 
-  kgdp_gdp_pval      <- 
-  vector( mode = "numeric", length = nExp )
+    cr_gdp_pval        <- 
+    ir_gdp_pval        <- 
+    gov_gdp_pval       <- 
+    imp_gdp_pval       <- 
+    x_gdp_pval         <- 
+    nx_gdp_pval        <- 
+    p_gdp_pval         <- 
+    k_gdp_pval         <- 
+    inve_gdp_pval      <- 
+    emp_gdp_pval       <- 
+    wage_gdp_pval      <- 
+    profits_gdp_pval   <- 
+    wage_gdp_pval      <- 
+    prod_gdp_pval      <- 
+    mk_gdp_pval        <- 
+    kl_gdp_pval        <- 
+    infla_gdp_pval     <- 
+    u_gdp_pval         <- 
+    pr_sh_gdp_pval     <- 
+    wg_sh_gdp_pval     <- 
+    pcu_gdp_pval       <- 
+    pr_gdp_pval        <- 
+    cgdp_gdp_pval          <- 
+    igdp_gdp_pval      <- 
+    ggdp_gdp_pval      <- 
+    nxgdp_gdp_pval     <- 
+    invgdp_gdp_pval    <- 
+    kgdp_gdp_pval      <- 
+    vector( mode = "numeric", length = nExp )
   
   adf_gdp_r      <-
-  adf_con_r      <-
-  adf_inv_r      <-
-  adf_gov_r      <-
-  adf_imp_r      <-
-  adf_x          <-
-  adf_nx         <-
-  adf_p          <-
-  adf_k          <-
-  adf_inve       <-
-  adf_emp        <-
-  adf_profits    <-
-  adf_wage       <-
-  adf_prod       <-
-  adf_mk         <-
-  adf_kl         <-
-  adf_u          <-
-  adf_pr_sh      <-
-  adf_wg_sh      <-
-  adf_infla      <-
-  adf_pcu        <-
-  adf_pr         <-
-  adf_cgdp       <-
-  adf_igdp       <-
-  adf_ggdp       <-
-  adf_nxgdp      <-
-  adf_invgdp     <-
-  adf_kgdp       <- 
-  list( )
+    adf_con_r      <-
+    adf_inv_r      <-
+    adf_gov_r      <-
+    adf_imp_r      <-
+    adf_x          <-
+    adf_nx         <-
+    adf_p          <-
+    adf_k          <-
+    adf_inve       <-
+    adf_emp        <-
+    adf_profits    <-
+    adf_wage       <-
+    adf_prod       <-
+    adf_mk         <-
+    adf_kl         <-
+    adf_u          <-
+    adf_pr_sh      <-
+    adf_wg_sh      <-
+    adf_infla      <-
+    adf_pcu        <-
+    adf_pr         <-
+    adf_cgdp       <-
+    adf_igdp       <-
+    adf_ggdp       <-
+    adf_nxgdp      <-
+    adf_invgdp     <-
+    adf_kgdp       <- 
+    list( )
   
   for(k in 1 : nExp){ # Experiment k
     
@@ -586,7 +586,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
     # ---- Bandpass filtered GDP, consumption and investment cycles graphic ----
     #
     
-    plot_bpf( list( log0( Adata[[ k ]]$Real_GDP ), log0( Adata[[ k ]]$C_r ), 
+    plot_bpf( list( log0( Adata[[ k ]]$Country_Real_GDP ), log0( Adata[[ k ]]$C_r ), 
                     log0( Adata[[ k ]]$I_r ) ),
               pl = lowP, pu = highP, nfix = bpfK, mask = TmaskPlot,
               mrk = transMk, # uncomment to add vertical line in selected point (e.g. mark of regime change)
@@ -620,8 +620,8 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       mk_gr [ j ]       <- mcData[[ k ]][ nTstat, "MK_G", j ]            # Markup Growth
       emp_gr [ j ]      <- mcData[[ k ]][ nTstat, "EMP_G", j ]           # Employment Growth
       kl_rt [ j ]       <- mcData[[ k ]][ nTstat, "KL", j ]              # Capital Labor Ratio
-      pr_sh [ j ]       <- mcData[[ k ]][ nTstat, "Profit_Share", j ]    # Profit Share
-      wg_sh [ j ]       <- mcData[[ k ]][ nTstat, "Wage_Share", j ]      # Wage Share  
+      pr_sh [ j ]       <- mcData[[ k ]][ nTstat, "Country_Profit_Share", j ]    # Profit Share
+      wg_sh [ j ]       <- mcData[[ k ]][ nTstat, "Country_Wage_Share", j ]      # Wage Share  
       pr_rt [ j ]       <- mcData[[ k ]][ nTstat, "PR", j ]              # Profit Rate  
       u_rt [ j ]        <- mcData[[ k ]][ nTstat, "U", j ]               # Unemployment Rate
       pcu_rt [ j ]      <- mcData[[ k ]][ nTstat, "PCU", j ]             # Capacity Utilization Rate
@@ -633,7 +633,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       kgdp_rt [ j ]     <- mcData[[ k ]][ nTstat, "KGDP", j ]            # Capital share of GDP
       
       # Apply Baxter-King filter to the series
-      gdp_bpf     <- bkfilter( log0( mcData[[ k ]][ TmaskStat, "Real_GDP", j ] ), pl = lowP, pu = highP, nfix = bpfK )
+      gdp_bpf     <- bkfilter( log0( mcData[[ k ]][ TmaskStat, "Country_Real_GDP", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       con_bpf     <- bkfilter( log0( mcData[[ k ]][ TmaskStat, "C_r", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       inv_bpf     <- bkfilter( log0( mcData[[ k ]][ TmaskStat, "I_r", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       gov_bpf     <- bkfilter( log0( mcData[[ k ]][ TmaskStat, "G_r", j ] ), pl = lowP, pu = highP, nfix = bpfK )
@@ -650,8 +650,8 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       mk_bpf      <- bkfilter( log0( mcData[[ k ]][ TmaskStat, "MK", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       kl_bpf      <- bkfilter( log0( mcData[[ k ]][ TmaskStat, "KL", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       infla_bpf   <- bkfilter( mcData[[ k ]][ TmaskStat, "P_G", j ] , pl = lowP, pu = highP, nfix = bpfK )
-      pr_sh_bpf   <- bkfilter( mcData[[ k ]][ TmaskStat, "Profit_Share", j ] , pl = lowP, pu = highP, nfix = bpfK )
-      wg_sh_bpf   <- bkfilter( mcData[[ k ]][ TmaskStat, "Wage_Share", j ] , pl = lowP, pu = highP, nfix = bpfK )
+      pr_sh_bpf   <- bkfilter( mcData[[ k ]][ TmaskStat, "Country_Profit_Share", j ] , pl = lowP, pu = highP, nfix = bpfK )
+      wg_sh_bpf   <- bkfilter( mcData[[ k ]][ TmaskStat, "Country_Wage_Share", j ] , pl = lowP, pu = highP, nfix = bpfK )
       u_bpf       <- bkfilter( mcData[[ k ]][ TmaskStat, "U", j ] , pl = lowP, pu = highP, nfix = bpfK )
       pcu_bpf     <- bkfilter( mcData[[ k ]][ TmaskStat, "PCU", j ] , pl = lowP, pu = highP, nfix = bpfK )
       pr_bpf      <- bkfilter( mcData[[ k ]][ TmaskStat, "PR", j ] , pl = lowP, pu = highP, nfix = bpfK )
@@ -663,7 +663,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       kgdp_bpf    <- bkfilter( mcData[[ k ]][ TmaskStat, "KGDP", j ] , pl = lowP, pu = highP, nfix = bpfK )
       
       # Augmented Dickey-Fuller tests for unit roots
-      adf_gdp_r[[ j ]]    <- adf.test( log0( mcData[[ k ]][ TmaskStat, "Real_GDP", j ] ) )
+      adf_gdp_r[[ j ]]    <- adf.test( log0( mcData[[ k ]][ TmaskStat, "Country_Real_GDP", j ] ) )
       adf_con_r[[ j ]]    <- adf.test( log0( mcData[[ k ]][ TmaskStat, "C_r", j ] ) )
       adf_inv_r[[ j ]]    <- adf.test( log0( mcData[[ k ]][ TmaskStat, "I_r", j ] ) )
       adf_gov_r[[ j ]]    <- adf.test( log0( mcData[[ k ]][ TmaskStat, "G_r", j ] ) )
@@ -680,8 +680,8 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       adf_mk[[ j ]]       <- adf.test( log0( mcData[[ k ]][ TmaskStat, "MK", j ] ) )
       adf_kl[[ j ]]       <- adf.test( log0( mcData[[ k ]][ TmaskStat, "KL", j ] ) )
       adf_u[[ j ]]        <- adf.test( mcData[[ k ]][ TmaskStat, "U", j ] ) 
-      adf_pr_sh[[ j ]]    <- adf.test( mcData[[ k ]][ TmaskStat, "Profit_Share", j ]  )
-      adf_wg_sh[[ j ]]    <- adf.test( mcData[[ k ]][ TmaskStat, "Wage_Share", j ]  )
+      adf_pr_sh[[ j ]]    <- adf.test( mcData[[ k ]][ TmaskStat, "Country_Profit_Share", j ]  )
+      adf_wg_sh[[ j ]]    <- adf.test( mcData[[ k ]][ TmaskStat, "Country_Wage_Share", j ]  )
       adf_infla[[ j ]]    <- adf.test( mcData[[ k ]][ TmaskStat, "P_G", j ]  )
       adf_pcu[[ j ]]      <- adf.test( mcData[[ k ]][ TmaskStat, "PCU", j ]  )
       adf_pr[[ j ]]       <- adf.test( mcData[[ k ]][ TmaskStat, "PR", j ]  )
@@ -737,11 +737,11 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
                             imp_bpf$cycle[ TmaskBpf, 1 ],
                             lag.max = lags, plot = FALSE, na.action = na.pass )
       x_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
-                            x_bpf$cycle[ TmaskBpf, 1 ],
-                            lag.max = lags, plot = FALSE, na.action = na.pass )
-      nx_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
-                          nx_bpf$cycle[ TmaskBpf, 1 ],
+                          x_bpf$cycle[ TmaskBpf, 1 ],
                           lag.max = lags, plot = FALSE, na.action = na.pass )
+      nx_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
+                           nx_bpf$cycle[ TmaskBpf, 1 ],
+                           lag.max = lags, plot = FALSE, na.action = na.pass )
       p_gdp[[ j ]] <- ccf( gdp_bpf$cycle[ TmaskBpf, 1 ],
                            p_bpf$cycle[ TmaskBpf, 1 ],
                            lag.max = lags, plot = FALSE, na.action = na.pass )
@@ -770,8 +770,8 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
                             kl_bpf$cycle[ TmaskBpf, 1 ],
                             lag.max = lags, plot = FALSE, na.action = na.pass )
       infla_gdp[[ j ]] <- ccf( gdp_bpf$cycle[ TmaskBpf, 1 ],
-                            infla_bpf$cycle[ TmaskBpf, 1 ],
-                            lag.max = lags, plot = FALSE, na.action = na.pass )
+                               infla_bpf$cycle[ TmaskBpf, 1 ],
+                               lag.max = lags, plot = FALSE, na.action = na.pass )
       u_gdp[[ j ]] <- ccf( gdp_bpf$cycle[ TmaskBpf, 1 ],
                            u_bpf$cycle[ TmaskBpf, 1 ],
                            lag.max = lags, plot = FALSE, na.action = na.pass )
@@ -782,26 +782,26 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
                               wg_sh_bpf$cycle[ TmaskBpf, 1 ],
                               lag.max = lags, plot = FALSE, na.action = na.pass )
       pcu_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
-                              pcu_bpf$cycle[ TmaskBpf, 1 ],
-                              lag.max = lags, plot = FALSE, na.action = na.pass )
+                            pcu_bpf$cycle[ TmaskBpf, 1 ],
+                            lag.max = lags, plot = FALSE, na.action = na.pass )
       pr_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
-                              pr_bpf$cycle[ TmaskBpf, 1 ],
-                              lag.max = lags, plot = FALSE, na.action = na.pass )
+                           pr_bpf$cycle[ TmaskBpf, 1 ],
+                           lag.max = lags, plot = FALSE, na.action = na.pass )
       cgdp_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
-                              cgdp_bpf$cycle[ TmaskBpf, 1 ],
-                              lag.max = lags, plot = FALSE, na.action = na.pass )
+                             cgdp_bpf$cycle[ TmaskBpf, 1 ],
+                             lag.max = lags, plot = FALSE, na.action = na.pass )
       igdp_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
-                              igdp_bpf$cycle[ TmaskBpf, 1 ],
-                              lag.max = lags, plot = FALSE, na.action = na.pass )
+                             igdp_bpf$cycle[ TmaskBpf, 1 ],
+                             lag.max = lags, plot = FALSE, na.action = na.pass )
       ggdp_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
                              ggdp_bpf$cycle[ TmaskBpf, 1 ],
                              lag.max = lags, plot = FALSE, na.action = na.pass )
       nxgdp_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
-                             nxgdp_bpf$cycle[ TmaskBpf, 1 ],
-                             lag.max = lags, plot = FALSE, na.action = na.pass )
+                              nxgdp_bpf$cycle[ TmaskBpf, 1 ],
+                              lag.max = lags, plot = FALSE, na.action = na.pass )
       invgdp_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
-                             invgdp_bpf$cycle[ TmaskBpf, 1 ],
-                             lag.max = lags, plot = FALSE, na.action = na.pass )
+                               invgdp_bpf$cycle[ TmaskBpf, 1 ],
+                               lag.max = lags, plot = FALSE, na.action = na.pass )
       kgdp_gdp[[ j ]] <- ccf(gdp_bpf$cycle[ TmaskBpf, 1 ],
                              kgdp_bpf$cycle[ TmaskBpf, 1 ],
                              lag.max = lags, plot = FALSE, na.action = na.pass )
@@ -811,7 +811,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
     # Applies t test to the mean lag results to test their significance (H0: lag < critCorr)
     for(i in 1 : (2 * lags + 1) ){ #do for all lags
       if(i != lags + 1)  # don't try to compute autocorrelation at lag 0
-      gdp_gdp_pval[ i ] <- t.test0( abs( unname( sapply( gdp_gdp, `[[`, "acf" ) )[ i, ] ), critCorr, CI )
+        gdp_gdp_pval[ i ] <- t.test0( abs( unname( sapply( gdp_gdp, `[[`, "acf" ) )[ i, ] ), critCorr, CI )
       cr_gdp_pval[ i ]  <- t.test0( abs( unname( sapply( cr_gdp, `[[`, "acf" ) )[ i, ] ), critCorr, CI )
       ir_gdp_pval[ i ]  <- t.test0( abs( unname( sapply( ir_gdp, `[[`, "acf" ) )[ i, ] ), critCorr, CI )
       gov_gdp_pval[ i ] <- t.test0( abs( unname( sapply( gov_gdp, `[[`, "acf" ) )[ i, ] ), critCorr, CI )
@@ -865,7 +865,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
         sd( mr_gr ) / sqrt( nSize ),
         sd( x_gr ) / sqrt( nSize ),
         sd( nx_gr ) / sqrt( nSize ),
-      
+        
         ## ADF test (logs)
         mean( unname( sapply( adf_gdp_r, `[[`, "statistic" ) ) ),
         mean( unname( sapply( adf_con_r, `[[`, "statistic" ) ) ),
@@ -939,7 +939,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
                                   "Imports",
                                   "Exports",
                                   "Net Exports"
-                                  )
+    )
     rownames( key.stats.1 ) <- c( "avg. growth rate", 
                                   " (s.e.)",
                                   "ADF test (logs)",
@@ -1016,7 +1016,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
         sd( unname( sapply( adf_wg_sh, `[[`, "p.value" ) ) ) / sqrt( nSize ),
         sd( unname( sapply( adf_mk, `[[`, "p.value" ) ) ) / sqrt( nSize ),
         sd( unname( sapply( adf_pr, `[[`, "p.value" ) ) ) / sqrt( nSize ),
-      
+        
         ## S.d. of bpf series
         mean( p_sd ),
         mean( profits_sd ), 
@@ -1054,7 +1054,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
                                   "Wage Share",
                                   "Markup", 
                                   "Profit Rate"
-                                 )
+    )
     rownames( key.stats.2 ) <- c( "avg. growth rate", 
                                   " (s.e.)",
                                   "ADF test (logs)",
@@ -1086,7 +1086,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
         mean( u_rt ), 
         mean( emp_gr ),
         mean( kl_rt ),
-      
+        
         ## (s.e.)
         sd( prod_gr ) / sqrt( nSize ),
         sd( pcu_rt ) / sqrt( nSize ),
@@ -1362,7 +1362,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
                               colMeans(t( unname( sapply(pr_gdp, `[[`, "acf" ) ) ), na.rm = T),
                               colSds(t( unname( sapply(pr_gdp, `[[`, "acf" ) ) ), na.rm = T) / sqrt( nSize ),
                               pr_gdp_pval
-                            
+                              
     ),
     
     ncol = 2 * lags + 1, byrow = T)
@@ -1374,7 +1374,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
                                     "Wage Share", " (s.e.)", " (p-val.)",
                                     "Markup", " (s.e.)", " (p-val.)",
                                     "Profit Rate", " (s.e.)", " (p-val.)"
-                                  )
+    )
     
     title <- paste( "Correlation structure for GDP (", legends[ k ], ")" )
     subTitle <- paste( eval( bquote( paste0( "( non-rate/ratio series are Baxter-King bandpass-filtered, low = ",
@@ -1488,7 +1488,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
                paste0( folder, "/", outDir, "/", repName, k, "_key_stats.csv" ) )
     write.csv( rbind( corr.struct.1, corr.struct.2, corr.struct.3, corr.struct.4), quote = FALSE,
                paste0( folder, "/", outDir, "/", repName, k, "_corr_struct.csv" ) )
-
+    
   }
   cat( "\nDone...\n" )
   

@@ -10,9 +10,9 @@
 #
 #******************************************************************
 
-folder    <- "./Res_teste_depreciation"                  # data files folder
-baseName  <- "Sim_"                     # data files base name (same as .lsd file)
-nExp      <- 2                         # number of experiments (sensitivity/different cases)
+folder    <- "C:/LSD/Work/Banks_TAPAS/R/data"                  # data files folder
+baseName  <- "Sim_1"                     # data files base name (same as .lsd file)
+nExp      <- 1                         # number of experiments (sensitivity/different cases)
 iniDrop   <- 0                          # initial time steps to drop from analysis (0=none)
 nKeep     <- -1                         # number of time steps to keep (-1=all)
 cores     <- 0                          # maximum number of cores to allocate (0=all)
@@ -21,7 +21,7 @@ savDat    <- F                          # save processed data files and re-use i
 expVal <- c("No", "Yes")                   # case parameter values
 
 # Aggregated variables to use
-logVars <- c( "Real_GDP",               # Real GDP
+logVars <- c( "Country_Annual_Real_GDP",               # Real GDP
               "C_r",                    # Real Consumption
               "I_r",                    # Real Investment
               "G_r",                    # Real Government Expenses
@@ -61,8 +61,8 @@ aggrVars <- append( logVars,
                         "MK_G",         # Markup Growth
                         "EMP_G",        # Employment Growth
                         "U",            # Unemployment Rate
-                        "Profit_Share", # Profit Share 
-                        "Wage_Share",   # Wage Share
+                        "Country_Profit_Share", # Profit Share 
+                        "Country_Wage_Share",   # Wage Share
                         "PCU",          # Productive Capacity Utilization
                         "PR",           # Profit Rate
                         "CGDP",         # Consumption Share of GDP
@@ -80,9 +80,6 @@ aggrVars <- append( logVars,
                         "DEBT_RT_C",
                         "DEBT_RT_K",
                         "DEBT_RT_I",
-                        "DEBT_RT_1",
-                        "DEBT_RT_2",
-                        "DEBT_RT_3",
                         "DEBT_RT_FI",
                         "DEBT_RT_CL",
                         "FS_HHI",
@@ -118,8 +115,8 @@ aggrVars <- append( logVars,
                         "MK_G",         # Markup Growth
                         "EMP_G",        # Employment Growth
                         "U",            # Unemployment Rate
-                        "Profit_Share", # Profit Share 
-                        "Wage_Share",   # Wage Share
+                        "Country_Profit_Share", # Profit Share 
+                        "Country_Wage_Share",   # Wage Share
                         "PCU",          # Productive Capacity Utilization
                         "PR",           # Profit Rate
                         "CGDP",         # Consumption Share of GDP
@@ -198,7 +195,7 @@ library( parallel, verbose = FALSE, quietly = TRUE )
 # Function to read one experiment data (to be parallelized)
 readExp <- function( exper ) {
   if( nExp > 1 ) {
-    myFiles <- list.files( path = folder, pattern = paste0( baseName, exper, "_[0-9]+.res" ),
+    myFiles <- list.files( path = folder, pattern = paste0( baseName, "_[0-9]+.res" ),
                            full.names = TRUE )
   } else {
     myFiles <- list.files( path = folder, pattern = paste0( baseName, "_[0-9]+.res" ),
@@ -354,9 +351,9 @@ invisible( gc( verbose = FALSE ) )
 bCase     <- 1      # experiment to be used as base case
 CI        <- 0.95   # desired confidence interval
 warmUpPlot<- 100    # number of "warm-up" runs for plots
-nTplot    <- 500     # last period to consider for plots (-1=all)
+nTplot    <- -1     # last period to consider for plots (-1=all)
 warmUpStat<- 300    # warm-up runs to evaluate all statistics
-nTstat    <- 500     # last period to consider for statistics (-1=all)
+nTstat    <- -1     # last period to consider for statistics (-1=all)
 bPlotCoef <- 1.5    # boxplot whiskers extension from the box (0=extremes)
 bPlotNotc <- FALSE  # use boxplot notches
 lowP      <- 6      # bandpass filter minimum period
@@ -750,7 +747,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
     # ---- Bandpass filtered GDP, consumption and investment cycles graphic ----
     #
     
-    plot_bpf( list( log0( Adata[[ k ]]$Real_GDP ), log0( Adata[[ k ]]$C_r ), 
+    plot_bpf( list( log0( Adata[[ k ]]$Country_Annual_Real_GDP ), log0( Adata[[ k ]]$C_r ), 
                     log0( Adata[[ k ]]$I_r ) ),
               pl = lowP, pu = highP, nfix = bpfK, mask = TmaskPlot,
               mrk = transMk, # uncomment to add vertical line in selected point (e.g. mark of regime change)
@@ -784,8 +781,8 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       mk_gr [ j ]<- mcData[[ k ]][ nTstat, "MK_G", j ]       
       emp_gr [ j ]<- mcData[[ k ]][ nTstat, "EMP_G", j ]     
       kl_rt [ j ]<- mcData[[ k ]][ nTstat, "KL", j ]         
-      pr_sh [ j ]<- mcData[[ k ]][ nTstat, "Profit_Share", j ]  
-      wg_sh [ j ]<- mcData[[ k ]][ nTstat, "Wage_Share", j ]   
+      pr_sh [ j ]<- mcData[[ k ]][ nTstat, "Country_Profit_Share", j ]  
+      wg_sh [ j ]<- mcData[[ k ]][ nTstat, "Country_Wage_Share", j ]   
       pr_rt [ j ]<- mcData[[ k ]][ nTstat, "PR", j ]             
       u_rt [ j ]<- mcData[[ k ]][ nTstat, "U", j ]               
       pcu_rt [ j ]<- mcData[[ k ]][ nTstat, "PCU", j ]             
@@ -816,7 +813,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       hedge [ j ]<- mcData[[ k ]][ nTstat, "HEDGE", j ]
       
       # Apply Baxter-King filter to the series
-      gdp_bpf<- bkfilter( log0( mcData[[ k ]][ TmaskStat, "Real_GDP", j ] ), pl = lowP, pu = highP, nfix = bpfK )
+      gdp_bpf<- bkfilter( log0( mcData[[ k ]][ TmaskStat, "Country_Annual_Real_GDP", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       con_bpf<- bkfilter( log0( mcData[[ k ]][ TmaskStat, "C_r", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       inv_bpf<- bkfilter( log0( mcData[[ k ]][ TmaskStat, "I_r", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       gov_bpf<- bkfilter( log0( mcData[[ k ]][ TmaskStat, "G_r", j ] ), pl = lowP, pu = highP, nfix = bpfK )
@@ -833,8 +830,8 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       mk_bpf<- bkfilter( log0( mcData[[ k ]][ TmaskStat, "MK", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       kl_bpf<- bkfilter( log0( mcData[[ k ]][ TmaskStat, "KL", j ] ), pl = lowP, pu = highP, nfix = bpfK )
       infla_bpf<- bkfilter( mcData[[ k ]][ TmaskStat, "P_G", j ] , pl = lowP, pu = highP, nfix = bpfK )
-      pr_sh_bpf<- bkfilter( mcData[[ k ]][ TmaskStat, "Profit_Share", j ] , pl = lowP, pu = highP, nfix = bpfK )
-      wg_sh_bpf<- bkfilter( mcData[[ k ]][ TmaskStat, "Wage_Share", j ] , pl = lowP, pu = highP, nfix = bpfK )
+      pr_sh_bpf<- bkfilter( mcData[[ k ]][ TmaskStat, "Country_Profit_Share", j ] , pl = lowP, pu = highP, nfix = bpfK )
+      wg_sh_bpf<- bkfilter( mcData[[ k ]][ TmaskStat, "Country_Wage_Share", j ] , pl = lowP, pu = highP, nfix = bpfK )
       u_bpf<- bkfilter( mcData[[ k ]][ TmaskStat, "U", j ] , pl = lowP, pu = highP, nfix = bpfK )
       pcu_bpf<- bkfilter( mcData[[ k ]][ TmaskStat, "PCU", j ] , pl = lowP, pu = highP, nfix = bpfK )
       pr_bpf<- bkfilter( mcData[[ k ]][ TmaskStat, "PR", j ] , pl = lowP, pu = highP, nfix = bpfK )
@@ -868,7 +865,7 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       rescue_bpf<- bkfilter( mcData[[ k ]][ TmaskStat, "Financial_Sector_Rescue", j ] , pl = lowP, pu = highP, nfix = bpfK )
       
       # Augmented Dickey-Fuller tests for unit roots
-      adf_gdp_r[[ j ]]<- adf.test( log0( mcData[[ k ]][ TmaskStat, "Real_GDP", j ] ) )
+      adf_gdp_r[[ j ]]<- adf.test( log0( mcData[[ k ]][ TmaskStat, "Country_Annual_Real_GDP", j ] ) )
       adf_con_r[[ j ]]<- adf.test( log0( mcData[[ k ]][ TmaskStat, "C_r", j ] ) )
       adf_inv_r[[ j ]]<- adf.test( log0( mcData[[ k ]][ TmaskStat, "I_r", j ] ) )
       adf_gov_r[[ j ]]<- adf.test( log0( mcData[[ k ]][ TmaskStat, "G_r", j ] ) )
@@ -885,8 +882,8 @@ tryCatch({    # enter error handling mode so PDF can be closed in case of error/
       adf_mk[[ j ]]<- adf.test( log0( mcData[[ k ]][ TmaskStat, "MK", j ] ) )
       adf_kl[[ j ]]<- adf.test( log0( mcData[[ k ]][ TmaskStat, "KL", j ] ) )
       adf_u[[ j ]]<- adf.test( mcData[[ k ]][ TmaskStat, "U", j ] ) 
-      adf_pr_sh[[ j ]]<- adf.test( mcData[[ k ]][ TmaskStat, "Profit_Share", j ]  )
-      adf_wg_sh[[ j ]]<- adf.test( mcData[[ k ]][ TmaskStat, "Wage_Share", j ]  )
+      adf_pr_sh[[ j ]]<- adf.test( mcData[[ k ]][ TmaskStat, "Country_Profit_Share", j ]  )
+      adf_wg_sh[[ j ]]<- adf.test( mcData[[ k ]][ TmaskStat, "Country_Wage_Share", j ]  )
       adf_infla[[ j ]]<- adf.test( mcData[[ k ]][ TmaskStat, "P_G", j ]  )
       adf_pcu[[ j ]]<- adf.test( mcData[[ k ]][ TmaskStat, "PCU", j ]  )
       adf_pr[[ j ]]<- adf.test( mcData[[ k ]][ TmaskStat, "PR", j ]  )

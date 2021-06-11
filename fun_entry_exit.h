@@ -296,14 +296,14 @@ In this variable a new firm enters if there is market space available and the en
 		v[62]=V("entry_debt_share");									//if =1, all debt.
 		v[63]=v[7]*v[25];												//cost of initial capital
 		
-			cur6=RNDDRAWS(root, "BANKS", "Bank_Market_Share");
-			v[19]=VS(cur6, "bank_id");
+			//cur6=RNDDRAWS(root, "BANKS", "Bank_Market_Share");			// ** Removed **
+			//v[19]=VS(cur6, "bank_id");						// ** Removed **
 		
               cur=ADDOBJ_EX("FIRMS",cur5);								//add new firm using as exemple the firm with closest market share to the average
               //begin writting some lagged variables and parameters           
               WRITES(cur, "firm_date_birth", t);										//firm's date of birth
               WRITES(cur, "firm_id",t);											//firm's number
-			  WRITES(cur, "firm_bank", v[19]);										//firm's bank identifier
+              //WRITES(cur, "firm_bank", v[19]);										// ** Removed ** firm's bank identifier
               WRITELS(cur, "Firm_Market_Share",v[2], t);								//firm's market share
               WRITELS(cur, "Firm_Effective_Market_Share",v[2], t);						//firm's effective market share
               WRITELS(cur, "Firm_Effective_Orders",(v[2]*v[20]), t);					//firm's effective orders
@@ -338,7 +338,8 @@ In this variable a new firm enters if there is market space available and the en
 			WRITELS(cur1, "Capital_Good_Acumulated_Production",0,t);	//write current capital acumulated production as zero
 			}
 		
-			v[13]=VS(cur6,"Bank_Interest_Rate_Long_Term");
+			//v[13]=VS(cur6,"Bank_Interest_Rate_Long_Term");			// ** Removed **
+			v[13]=VS(cur5, "Firm_Interest_Rate");					// ** Included **
 			
 			CYCLE_SAFES(cur, cur1, "FIRM_LOANS")
 			{

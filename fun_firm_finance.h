@@ -1,15 +1,30 @@
 
 // ^~^~^~^~^^~^~^~^~^ Edited equations Begin ^~^~^~^~^^~^~^~^~^
 
+
 /**********************************************************************
 Credit Risk and the Interest Rate
 Dawid e Delli Gatti (2018), item 2.5.1.
 *********************************************************************/
 
+EQUATION("Firm_Operating_Cash_Flow")
+//Adapted from "Firm_Profit" 
+	v[0]=V("Firm_Revenue");
+	v[1]=V("Firm_Effective_Production");                              //firm's effective production
+	v[2]=V("Firm_Variable_Cost");                                     //firm's variable cost	
+	v[3]=v[1]*v[2];													  //production cost
+
+	v[4]=V("sector_rnd_revenue_proportion");						  //share of net profits to allocate in R&D
+	v[5]=v[0]*v[4];													  //R&d expenses
+	
+	v[9]=v[0]-v[3]-v[5];										  	  //firm profits
+RESULT(v[9])
+
+	
 EQUATION("Firm_Probability_Default")
 // Pedrosa & Lang (2021), eq. 17. 
-	v[0]=V("fs_fi_1");														// (Parameter) Requires calibration
-	v[1]=VL("Firm_Revenue", 1);										// Proxy for expected operating cash flow
+	v[0]=V("fs_fi_1");									// (Parameter) Requires calibration
+	v[1]=VL("Firm_Operating_Cash_Flow", 1);							// Proxy for expected operating cash flow
 	v[2]=V("Firm_Debt_Servicing");								// First tranche of prospective debt servicing
 	v[3]=V("fs_fi_2");														// (Parameter) Requires calibration	
 	v[4]=VL("Firm_Debt_Rate", 1); 								// Firm leverage (lagged) 
@@ -30,7 +45,7 @@ RESULT(v[8])
 EQUATION("Firm_Debt_Servicing")
 // Pedrosa & Lang (2021), eq. 17 et seq. 
 	v[0]=V("Firm_Interest_Rate");
-	v[1]=V("fs_lambda");												// (Parameter) Loan duration = 10 periods
+	v[1]=V("fs_lambda");												// (Parameter) Loan duration
 	v[2]=V("Firm_Demand_Loans"); 
 	v[3]=(v[0]+(1/v[1]))*v[2];
 RESULT(v[3])
@@ -41,7 +56,7 @@ EQUATION("Firm_Interest_Rate")
 	v[0]=V("Central_Bank_Basic_Interest_Rate");
 	v[1]=V("fs_mi_1");															// (Parameter) Bank's risk-aversion
 	v[2]=VL("Firm_Debt_Servicing", 1);
-	v[3]=VL("Firm_Revenue", 1); 
+	v[3]=VL("Firm_Operating_Cash_Flow", 1); 
 	if (v[3]>0)
 		{	
 		v[4]=v[1]*v[2]/v[3]; 													// Spread ...	
@@ -50,7 +65,7 @@ EQUATION("Firm_Interest_Rate")
 	else 							  				
 		{
 		v[4]=v[1]*v[2];																// If revenues are negative, they are not used to dscount the applicable spread (banks would probably ration credit in this case, anyway).
-		v[5]=v[0]*v[4];
+		v[5]=v[0]+v[4];
 		}
 WRITE("Firm_Interest_Spread", v[4]);
 WRITE("Firm_Interest_Rate_Short_Term", v[5]);		

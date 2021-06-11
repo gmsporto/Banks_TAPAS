@@ -18,25 +18,25 @@ time_plots <- function( mcData, Adata, mdata, Mdata, Sdata, nExp, nSize, nTsteps
   # select data to plot
   for( k in 1 : nExp ){
     # MC averages
-    exps[[ k ]] <- list( log0( Adata[[ k ]]$Real_GDP[ TmaskPlot ] ),
+    exps[[ k ]] <- list( log0( Adata[[ k ]]$Country_Real_GDP[ TmaskPlot ] ),
                        log0( Adata[[ k ]]$I_r[ TmaskPlot ] ),
                        log0( Adata[[ k ]]$C_r[ TmaskPlot ] ) )
     # minimum and maximum MC runs
-    min[[ k ]] <- list( log0( mdata[[ k ]]$Real_GDP[ TmaskPlot ] ),
+    min[[ k ]] <- list( log0( mdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] ),
                       log0( mdata[[ k ]]$I_r[ TmaskPlot ] ),
                       log0( mdata[[ k ]]$C_r[ TmaskPlot ] ) )
-    max[[ k ]] <- list( log0( Mdata[[ k ]]$Real_GDP[ TmaskPlot ] ),
+    max[[ k ]] <- list( log0( Mdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] ),
                       log0( Mdata[[ k ]]$I_r[ TmaskPlot ] ),
                       log0( Mdata[[ k ]]$C_r[ TmaskPlot ] ) )
     # MC confidence interval
-    lo[[ k ]] <- list( log0( Adata[[ k ]]$Real_GDP[ TmaskPlot ] -
-                             qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
+    lo[[ k ]] <- list( log0( Adata[[ k ]]$Country_Real_GDP[ TmaskPlot ] -
+                             qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
                      log0( Adata[[ k ]]$I_r[ TmaskPlot ] -
                              qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$I_r[ TmaskPlot ] / sqrt( nSize ) ),
                      log0( Adata[[ k ]]$C_r[ TmaskPlot ] -
                              qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$C_r[ TmaskPlot ]  / sqrt( nSize ) ) )
-    hi[[ k ]] <- list( log0( Adata[[ k ]]$Real_GDP[ TmaskPlot ] +
-                             qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
+    hi[[ k ]] <- list( log0( Adata[[ k ]]$Country_Real_GDP[ TmaskPlot ] +
+                             qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
                      log0( Adata[[ k ]]$I_r[ TmaskPlot ] +
                              qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$I_r[ TmaskPlot ] / sqrt( nSize ) ),
                      log0( Adata[[ k ]]$C_r[ TmaskPlot ] +
@@ -55,25 +55,25 @@ time_plots <- function( mcData, Adata, mdata, Mdata, Sdata, nExp, nSize, nTsteps
   # select data to plot
   for( k in 1 : nExp ){
     # MC averages
-    exps[[ k ]] <- list( log0( Adata[[ k ]]$Real_GDP[ TmaskPlot ] ),
+    exps[[ k ]] <- list( log0( Adata[[ k ]]$Country_Real_GDP[ TmaskPlot ] ),
                          log0( Adata[[ k ]]$M_r[ TmaskPlot ] ),
                          log0( Adata[[ k ]]$X_r[ TmaskPlot ] ) )
     # minimum and maximum MC runs
-    min[[ k ]] <- list( log0( mdata[[ k ]]$Real_GDP[ TmaskPlot ] ),
+    min[[ k ]] <- list( log0( mdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] ),
                         log0( mdata[[ k ]]$M_r[ TmaskPlot ] ),
                         log0( mdata[[ k ]]$X_r[ TmaskPlot ] ) )
-    max[[ k ]] <- list( log0( Mdata[[ k ]]$Real_GDP[ TmaskPlot ] ),
+    max[[ k ]] <- list( log0( Mdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] ),
                         log0( Mdata[[ k ]]$M_r[ TmaskPlot ] ),
                         log0( Mdata[[ k ]]$X_r[ TmaskPlot ] ) )
     # MC confidence interval
-    lo[[ k ]] <- list( log0( Adata[[ k ]]$Real_GDP[ TmaskPlot ] -
-                               qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
+    lo[[ k ]] <- list( log0( Adata[[ k ]]$Country_Real_GDP[ TmaskPlot ] -
+                               qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
                        log0( Adata[[ k ]]$M_r[ TmaskPlot ] -
                                qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$M_r[ TmaskPlot ] / sqrt( nSize ) ),
                        log0( Adata[[ k ]]$X_r[ TmaskPlot ] -
                                qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$X_r[ TmaskPlot ]  / sqrt( nSize ) ) )
-    hi[[ k ]] <- list( log0( Adata[[ k ]]$Real_GDP[ TmaskPlot ] +
-                               qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
+    hi[[ k ]] <- list( log0( Adata[[ k ]]$Country_Real_GDP[ TmaskPlot ] +
+                               qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
                        log0( Adata[[ k ]]$M_r[ TmaskPlot ] +
                                qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$M_r[ TmaskPlot ] / sqrt( nSize ) ),
                        log0( Adata[[ k ]]$X_r[ TmaskPlot ] +
@@ -92,25 +92,25 @@ time_plots <- function( mcData, Adata, mdata, Mdata, Sdata, nExp, nSize, nTsteps
   # select data to plot
   for( k in 1 : nExp ){
     # MC averages
-    exps[[ k ]] <- list( log0( Adata[[ k ]]$Real_GDP[ TmaskPlot ] ),
+    exps[[ k ]] <- list( log0( Adata[[ k ]]$Country_Real_GDP[ TmaskPlot ] ),
                          log0( Adata[[ k ]]$G_r[ TmaskPlot ] ),
                          log0( Adata[[ k ]]$NX_r[ TmaskPlot ] ) )
     # minimum and maximum MC runs
-    min[[ k ]] <- list( log0( mdata[[ k ]]$Real_GDP[ TmaskPlot ] ),
+    min[[ k ]] <- list( log0( mdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] ),
                         log0( mdata[[ k ]]$G_r[ TmaskPlot ] ),
                         log0( mdata[[ k ]]$NX_r[ TmaskPlot ] ) )
-    max[[ k ]] <- list( log0( Mdata[[ k ]]$Real_GDP[ TmaskPlot ] ),
+    max[[ k ]] <- list( log0( Mdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] ),
                         log0( Mdata[[ k ]]$G_r[ TmaskPlot ] ),
                         log0( Mdata[[ k ]]$NX_r[ TmaskPlot ] ) )
     # MC confidence interval
-    lo[[ k ]] <- list( log0( Adata[[ k ]]$Real_GDP[ TmaskPlot ] -
-                               qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
+    lo[[ k ]] <- list( log0( Adata[[ k ]]$Country_Real_GDP[ TmaskPlot ] -
+                               qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
                        log0( Adata[[ k ]]$G_r[ TmaskPlot ] -
                                qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$G_r[ TmaskPlot ] / sqrt( nSize ) ),
                        log0( Adata[[ k ]]$NX_r[ TmaskPlot ] -
                                qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$NX_r[ TmaskPlot ]  / sqrt( nSize ) ) )
-    hi[[ k ]] <- list( log0( Adata[[ k ]]$Real_GDP[ TmaskPlot ] +
-                               qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
+    hi[[ k ]] <- list( log0( Adata[[ k ]]$Country_Real_GDP[ TmaskPlot ] +
+                               qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$Country_Real_GDP[ TmaskPlot ] / sqrt( nSize ) ),
                        log0( Adata[[ k ]]$G_r[ TmaskPlot ] +
                                qnorm(1 - (1 - CI ) / 2) * Sdata[[ k ]]$G_r[ TmaskPlot ] / sqrt( nSize ) ),
                        log0( Adata[[ k ]]$NX_r[ TmaskPlot ] +

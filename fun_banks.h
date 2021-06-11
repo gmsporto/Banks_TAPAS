@@ -236,6 +236,7 @@ Bank Credit Demand;
 Dawid e Delli Gatti (2018), item 2.4.5.
 *********************************************************************/
 
+
 EQUATION("Bank_Demand_Loans")
 // Loan demand by firms and households
 
@@ -271,7 +272,6 @@ RESULT(v[7])
 
 EQUATION("Bank_Market_Share")
 // Ratio of a bank's client firms to the total number of firms. 
-
 v[10]=V("bank_id");
 
 	v[0]=0;
@@ -300,6 +300,7 @@ v[10]=V("bank_id");
 	v[5]=v[1]!=0? v[0]/v[1] : 0;
 
 RESULT(v[5])
+
 
 /*
 EQUATION("Bank_Market_Share")
@@ -502,9 +503,10 @@ EQUATION("Bank_Loans_Effective_Classes")
 	v[7]=max(0, v[7]);
 	WRITE("Bank_Supply_Capital_Firms", v[7]);
 RESULT(v[4])
+*/
+
 
 EQUATION_DUMMY("Bank_Supply_Capital_Firms", "Bank_Loans_Effective_Class")
-*/
 
 
 EQUATION("Bank_Loans_Effective_Firms")
@@ -531,7 +533,7 @@ EQUATION("Bank_Loans_Effective_Firms")
 			v[8]=VS(cur1, "firm_bank");
 			if(v[4] > 0 && v[8]==v[10] && v[7] > 1 && v[3]+v[4]*v[12] <= v[11]) 	// If the firm requests a loan && is a client of the bank & the prospective loan is considered profitable & the bank has sufficient capital to cover regulatory requirements ...
 				{
-					WRITES(cur1, "firm_effective_loan", v[4]);
+					WRITES(cur1, "firm_effective_loans", v[4]);
 					cur2 = ADDOBJS(cur1, "FIRM_LOANS");			// ... the bank underwrites the requested loan.
 					WRITES(cur2, "firm_loan_total_amount", v[4]);
 					WRITES(cur2, "firm_loan_fixed_object", 0);
@@ -555,7 +557,7 @@ EQUATION("Bank_Loans_Effective_Firms")
 			else
 				{
 				
-					WRITES(cur1, "firm_effective_loan", 0);
+					WRITES(cur1, "firm_effective_loans", 0);
 					v[2]=v[2];
 					v[3]=v[3];
 
